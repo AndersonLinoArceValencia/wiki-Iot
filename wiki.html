@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT para la Salud — Wiki Grupo 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f6f1;
+    --paper: #fffef9;
+    --ink: #1a1612;
+    --muted: #5a5047;
+    --accent: #2b5e3f;
+    --accent-light: #e8f4ee;
+    --accent2: #8b3a1c;
+    --border: #d6cfc0;
+    --highlight: #fdf3e3;
+    --cite-bg: #eef5f1;
+    --cite-border: #2b5e3f;
+    --warn: #8b3a1c;
+    --warn-bg: #fdf0eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.78;
+  }
+
+  /* ── HEADER ── */
+  .wiki-header {
+    background: var(--accent);
+    color: white;
+    padding: 0;
+    border-bottom: 4px solid #1d4229;
+    position: relative;
+    overflow: hidden;
+  }
+  .wiki-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.03) 30px,
+      rgba(255,255,255,0.03) 60px
+    );
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+  }
+  .wiki-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .wiki-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.9rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.6rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .wiki-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.8);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+  .meta-bar {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.7);
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 1rem;
+  }
+  .meta-bar span { display: flex; align-items: center; gap: 0.4rem; }
+
+  /* ── NAV / TOC ── */
+  .toc-box {
+    max-width: 900px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+  }
+  .toc {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 1.5rem 2rem;
+    border-radius: 0 6px 6px 0;
+  }
+  .toc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.9rem;
+  }
+  .toc ol { padding-left: 1.2rem; }
+  .toc li { margin: 0.3rem 0; }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent2); text-decoration: underline; }
+  .toc ol ol { margin-top: 0.3rem; }
+  .toc ol ol li { list-style-type: lower-alpha; }
+
+  /* ── MAIN ── */
+  .content {
+    max-width: 900px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 2rem;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2.5rem 2.8rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  h2 .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    background: var(--accent);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 1.5rem 0 0.7rem;
+  }
+
+  p { margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── ADVANTAGE / DISADVANTAGE CARDS ── */
+  .cards {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .card {
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    border-left: 4px solid transparent;
+    position: relative;
+  }
+  .card.pro {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+  .card.con {
+    background: var(--warn-bg);
+    border-color: var(--warn);
+  }
+  .card-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card.pro .card-title { color: var(--accent); }
+  .card.con .card-title { color: var(--warn); }
+  .icon { font-size: 1.1rem; }
+  .card p { font-size: 0.95rem; color: var(--muted); margin: 0; }
+
+  /* ── EXAMPLES ── */
+  .examples-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 640px) { .examples-grid { grid-template-columns: 1fr; } }
+  .ex-card {
+    background: var(--highlight);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.3rem 1.4rem;
+  }
+  .ex-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .ex-card h4 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .ex-card p { font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+  /* ── INLINE CITE ── */
+  sup.ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  sup.ref a { color: inherit; text-decoration: none; }
+  sup.ref a:hover { text-decoration: underline; }
+
+  /* ── REFERENCES ── */
+  .ref-list {
+    counter-reset: refs;
+    list-style: none;
+    padding: 0;
+  }
+  .ref-list li {
+    counter-increment: refs;
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 2rem;
+    flex-shrink: 0;
+    padding-top: 0.05rem;
+  }
+  .ref-list a { color: var(--accent); word-break: break-all; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: var(--cite-bg);
+    border-left: 4px solid var(--cite-border);
+    padding: 1rem 1.4rem;
+    border-radius: 0 4px 4px 0;
+    margin: 1.2rem 0;
+    font-style: italic;
+    font-size: 0.97rem;
+    color: var(--muted);
+  }
+
+  /* ── STAT BOX ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.4rem 0;
+  }
+  @media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } }
+  .stat-box {
+    text-align: center;
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 0.3rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 600px) {
+    .wiki-title { font-size: 2rem; }
+    .section { padding: 1.5rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="wiki-header">
+  <div class="header-inner">
+    <div class="wiki-badge">📡 Wiki IoT · Grupo 5</div>
+    <h1 class="wiki-title">IoT para la Salud</h1>
+    <p class="wiki-subtitle">Internet de las Cosas aplicado al sector sanitario: importancia, ventajas, desventajas y ejemplos aplicativos</p>
+    <div class="meta-bar">
+      <span>📅 2025</span>
+      <span>🏫 Asignatura: IoT</span>
+      <span>👥 Grupo 5</span>
+      <span>📚 8 referencias IEEE verificadas</span>
+      <span>🌐 Fuentes: MDPI · IEEE Xplore · PubMed · ScienceDirect</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══ TOC ══ -->
+<div class="toc-box">
+  <nav class="toc">
+    <div class="toc-title">Tabla de contenido</div>
+    <ol>
+      <li><a href="#intro">Introducción y contexto general</a></li>
+      <li><a href="#importancia">Importancia del IoT en la Salud</a></li>
+      <li><a href="#ventajas">Ventajas</a></li>
+      <li><a href="#desventajas">Desventajas y desafíos</a></li>
+      <li><a href="#ejemplos">Ejemplos aplicativos</a></li>
+      <li><a href="#conclusiones">Conclusiones</a></li>
+      <li><a href="#referencias">Referencias (formato IEEE)</a></li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ══ CONTENT ══ -->
+<main class="content">
+
+  <!-- 1. INTRODUCCIÓN -->
+  <section class="section" id="intro">
+    <h2><span class="num">1</span> Introducción y contexto general</h2>
+    <p>El <strong>Internet de las Cosas</strong> (IoT, del inglés <em>Internet of Things</em>) hace referencia a la interconexión digital de objetos físicos —sensores, dispositivos, actuadores— a través de redes de comunicación, permitiendo la recopilación, transmisión y procesamiento de datos de manera autónoma y en tiempo real. En el campo de la salud, esta tecnología se materializa en lo que se denomina <strong>Internet de las Cosas Médico</strong> (IoMT, <em>Internet of Medical Things</em>): un ecosistema de dispositivos médicos inteligentes, aplicaciones clínicas y plataformas en la nube que trabajan de forma coordinada para mejorar la calidad de la atención sanitaria.<sup class="ref"><a href="#r4">[4]</a></sup></p>
+
+    <p>La integración del IoT en la medicina no es un fenómeno aislado ni superficial. <sup class="ref"><a href="#r1">[1]</a></sup> Representa una transformación estructural del paradigma de la atención en salud: se transita de un modelo reactivo —basado en la consulta periódica al médico cuando surgen síntomas— hacia un modelo <em>proactivo y continuo</em>, en el que los datos biométricos del paciente son monitoreados permanentemente, los sistemas emiten alertas tempranas y las decisiones clínicas se apoyan en análisis de datos masivos.<sup class="ref"><a href="#r3">[3]</a></sup></p>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-num">$464 B</span>
+        <div class="stat-label">Valor proyectado del mercado IoT en salud para 2034<sup class="ref"><a href="#r2">[2]</a></sup></div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">115 M</span>
+        <div class="stat-label">Pacientes que usarán monitoreo remoto para 2027 (Juniper Research)<sup class="ref"><a href="#r8">[8]</a></sup></div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">23.4%</span>
+        <div class="stat-label">Tasa de crecimiento anual compuesto (CAGR) del mercado IoT-Salud 2024–2034<sup class="ref"><a href="#r2">[2]</a></sup></div>
+      </div>
+    </div>
+
+    <p>Estas cifras ilustran con nitidez la magnitud del fenómeno. El IoT en salud no es una tendencia emergente —ya es una realidad consolidada— y su trayectoria de expansión indica que continuará redefiniendo los sistemas sanitarios a escala global durante las próximas décadas.</p>
+  </section>
+
+  <!-- 2. IMPORTANCIA -->
+  <section class="section" id="importancia">
+    <h2><span class="num">2</span> Importancia del IoT en la Salud</h2>
+
+    <p>La relevancia del IoT en el ámbito sanitario es multidimensional. En primer lugar, responde a una necesidad epidemiológica urgente: el envejecimiento global de la población, el incremento de enfermedades crónicas no transmisibles —diabetes, hipertensión, enfermedades cardiovasculares— y la creciente escasez de profesionales de la salud en zonas rurales y remotas generan una presión sostenida sobre los sistemas hospitalarios convencionales.<sup class="ref"><a href="#r3">[3]</a></sup> El IoT ofrece una respuesta tecnológica a esta presión al descentralizar la atención clínica y llevarla directamente al entorno cotidiano del paciente.</p>
+
+    <div class="callout">
+      "La adopción de tecnologías IoT en el sector salud representa un desplazamiento transformador con beneficios tangibles, al ofrecer un examen detallado de cómo los sensores específicos y los métodos de comunicación mejoran la atención hospitalaria."<sup class="ref"><a href="#r1">[1]</a></sup>
+    </div>
+
+    <p>En segundo lugar, el IoT tiene una importancia clínica directa en la mejora de los resultados de salud. Los sistemas de monitoreo remoto de pacientes (RPM, <em>Remote Patient Monitoring</em>) permiten a los profesionales de la salud supervisar parámetros vitales —frecuencia cardíaca, saturación de oxígeno, glucosa en sangre, presión arterial— de manera continua, sin que el paciente deba desplazarse a un centro asistencial. Esto resulta especialmente valioso en el tratamiento de enfermedades crónicas, donde las intervenciones oportunas pueden prevenir complicaciones graves y reducir hospitalizaciones.<sup class="ref"><a href="#r2">[2]</a></sup></p>
+
+    <p>En tercer lugar, la importancia económica es innegable. La reducción de tiempos de espera, la gestión eficiente de recursos hospitalarios, el control de inventarios de medicamentos y la disminución de errores en la administración de tratamientos se traducen en ahorros significativos para los sistemas de salud.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+
+    <h3>Dimensiones clave de la importancia del IoT en salud</h3>
+    <div class="cards">
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🏥</span> Clínica</div>
+        <p>Mejora de los resultados terapéuticos mediante el seguimiento continuo de parámetros biométricos y la detección temprana de anomalías fisiológicas.</p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🌍</span> Social y equitativa</div>
+        <p>Ampliación del acceso a servicios de salud para poblaciones en zonas remotas o con movilidad reducida, democratizando la atención médica de calidad.</p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">💡</span> Sistémica u operativa</div>
+        <p>Optimización del flujo de pacientes, gestión inteligente de camas, control de inventarios y reducción de la carga administrativa para el personal sanitario.</p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">📊</span> Científica y de investigación</div>
+        <p>Generación de grandes volúmenes de datos clínicos en tiempo real, que alimentan modelos de predicción de enfermedades e investigación biomédica.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. VENTAJAS -->
+  <section class="section" id="ventajas">
+    <h2><span class="num">3</span> Ventajas</h2>
+
+    <p>La literatura científica revisada permite identificar las siguientes ventajas principales del IoT aplicado a la salud:<sup class="ref"><a href="#r3">[3]</a></sup><sup class="ref"><a href="#r4">[4]</a></sup><sup class="ref"><a href="#r10">[10]</a></sup></p>
+
+    <div class="cards">
+      <div class="card pro">
+        <div class="card-title"><span class="icon">📡</span> 1. Monitoreo remoto continuo de pacientes</div>
+        <p>Los dispositivos conectados permiten registrar y transmitir signos vitales de manera ininterrumpida, posibilitando que médicos y enfermeros realicen un seguimiento sin necesidad de la presencia física del paciente en el hospital. Esto es particularmente beneficioso para pacientes con enfermedades crónicas como diabetes o insuficiencia cardíaca.<sup class="ref"><a href="#r3">[3]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">⚡</span> 2. Detección temprana y alertas en tiempo real</div>
+        <p>Los algoritmos integrados en los dispositivos IoT pueden identificar patrones anormales —una arritmia cardíaca, una caída brusca de glucosa— y generar alertas inmediatas al equipo médico, lo que permite intervenciones preventivas antes de que se produzcan eventos adversos graves.<sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🏗️</span> 3. Eficiencia operativa en entornos hospitalarios</div>
+        <p>Las instituciones de salud que implementan IoT optimizan el flujo de pacientes, gestionan con mayor precisión la ocupación de camas, automatizan la actualización de registros clínicos y controlan en tiempo real los parámetros ambientales (temperatura, humedad, calidad del aire) relevantes para la bioseguridad.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">💊</span> 4. Mejora en la gestión de la cadena de suministro médico</div>
+        <p>Mediante etiquetas RFID, códigos de barras y rastreo GPS, los centros hospitalarios controlan en tiempo real la ubicación y el estado de medicamentos, equipos y suministros críticos, evitando desabastecimientos y garantizando la autenticidad de los fármacos.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🧠</span> 5. Apoyo a la toma de decisiones clínicas</div>
+        <p>La integración del IoT con inteligencia artificial y aprendizaje automático permite construir modelos predictivos de enfermedades basados en los datos recopilados por los sensores, mejorando significativamente la precisión diagnóstica y orientando la personalización de los tratamientos.<sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🌐</span> 6. Expansión de la telemedicina</div>
+        <p>El IoT ha sido el soporte tecnológico fundamental del auge de la telemedicina. Según datos de la American Hospital Association, alrededor del 74% de los pacientes en Estados Unidos utilizaron servicios de telehealth habilitados por tecnologías IoT en 2023.<sup class="ref"><a href="#r2">[2]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">💰</span> 7. Reducción de costos sanitarios</div>
+        <p>Al disminuir hospitalizaciones evitables, reducir tiempos de espera y optimizar recursos humanos y materiales, el IoT contribuye directamente a la sostenibilidad financiera de los sistemas de salud, tanto públicos como privados.<sup class="ref"><a href="#r3">[3]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">🤝</span> 8. Empoderamiento del paciente</div>
+        <p>Los dispositivos vestibles y las aplicaciones de salud conectadas permiten a las personas participar activamente en el cuidado de su propia salud, promoviendo comportamientos preventivos y el autocuidado informado.<sup class="ref"><a href="#r7">[7]</a></sup></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DESVENTAJAS -->
+  <section class="section" id="desventajas">
+    <h2><span class="num">4</span> Desventajas y desafíos</h2>
+
+    <p>A pesar de sus indudables beneficios, la implementación del IoT en entornos de salud enfrenta desafíos significativos que la comunidad científica y tecnológica continúa abordando activamente. Estos desafíos no son menores: dado que se trata de sistemas que gestionan datos personales sensibles y que pueden incidir directamente en la seguridad de los pacientes, sus implicaciones son potencialmente graves.<sup class="ref"><a href="#r5">[5]</a></sup></p>
+
+    <div class="cards">
+      <div class="card con">
+        <div class="card-title"><span class="icon">🔓</span> 1. Vulnerabilidades de seguridad y ciberseguridad</div>
+        <p>Los dispositivos IoT médicos son blancos frecuentes de ataques informáticos. Datos de Palo Alto Networks Unit 42 reportaron un incremento del 60% interanual en el malware dirigido a dispositivos IoT en entornos sanitarios durante 2023. Asimismo, un estudio de Symantec reveló que el 83% de los dispositivos IoT en salud operan con sistemas operativos desactualizados, haciéndolos especialmente vulnerables a ataques de tipo ransomware, DDoS y ataques de intermediario (MitM).<sup class="ref"><a href="#r6">[6]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">🔒</span> 2. Privacidad de los datos del paciente</div>
+        <p>La recopilación masiva y continua de datos biométricos plantea serios desafíos para la privacidad. Los datos de salud son extremadamente sensibles y su exposición no autorizada puede tener consecuencias legales, laborales y personales graves para los pacientes. La transmisión de esta información a través de redes heterogéneas la hace especialmente vulnerable a interceptaciones.<sup class="ref"><a href="#r5">[5]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">🔗</span> 3. Falta de interoperabilidad y estandarización</div>
+        <p>La heterogeneidad de dispositivos, protocolos de comunicación y plataformas de software dificulta la integración fluida de los sistemas IoT con la infraestructura de tecnologías de información existente en los hospitales. La ausencia de estándares unificados complica el diseño de marcos de seguridad interoperables.<sup class="ref"><a href="#r14">[14]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">⚙️</span> 4. Limitaciones técnicas de los dispositivos</div>
+        <p>Muchos dispositivos IoT médicos operan con recursos computacionales y energéticos restringidos, lo que limita la implementación de mecanismos de seguridad robustos como el cifrado avanzado. Además, problemas de latencia y conectividad pueden comprometer la fiabilidad de los datos en tiempo real.<sup class="ref"><a href="#r9">[9]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">⚖️</span> 5. Marco regulatorio y legal insuficiente</div>
+        <p>La velocidad de adopción del IoT en salud supera con frecuencia la capacidad de los marcos normativos vigentes para regularla adecuadamente. Las brechas regulatorias pueden crear incertidumbre jurídica para fabricantes, proveedores de salud y pacientes respecto a la responsabilidad en caso de fallos o violaciones de datos.<sup class="ref"><a href="#r5">[5]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">💸</span> 6. Costos de implementación y mantenimiento</div>
+        <p>La inversión inicial requerida para desplegar infraestructura IoT en hospitales —adquisición de dispositivos, integración con sistemas existentes, formación del personal y mantenimiento continuo— puede ser elevada, constituyendo una barrera significativa para instituciones con recursos limitados, especialmente en países en desarrollo.<sup class="ref"><a href="#r9">[9]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">🧑‍⚕️</span> 7. Resistencia al cambio y brecha digital</div>
+        <p>La adopción efectiva del IoT en salud requiere no solo infraestructura tecnológica, sino también la formación y adaptación del personal sanitario, así como garantizar que los pacientes —especialmente adultos mayores— puedan interactuar con estos dispositivos de manera comprensible y autónoma.<sup class="ref"><a href="#r9">[9]</a></sup></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. EJEMPLOS -->
+  <section class="section" id="ejemplos">
+    <h2><span class="num">5</span> Ejemplos aplicativos</h2>
+
+    <p>A continuación se presentan los principales casos de aplicación del IoT en el sector salud, documentados en la literatura científica revisada:<sup class="ref"><a href="#r3">[3]</a></sup><sup class="ref"><a href="#r4">[4]</a></sup></p>
+
+    <div class="examples-grid">
+      <div class="ex-card">
+        <div class="ex-tag">Wearables</div>
+        <h4>Dispositivos vestibles de monitoreo</h4>
+        <p>Smartwatches, parches biosensores y rastreadores de actividad física que miden en tiempo real parámetros como frecuencia cardíaca, saturación de oxígeno (SpO₂), patrones de sueño y nivel de glucosa en sangre. Permiten al paciente y al médico acceder continuamente al estado de salud.<sup class="ref"><a href="#r3">[3]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">RPM · Monitoreo Remoto</div>
+        <h4>Sistemas de Monitoreo Remoto de Pacientes (RPM)</h4>
+        <p>Plataformas que recopilan datos biométricos del paciente en su domicilio y los transmiten al equipo médico. Son especialmente útiles en el seguimiento de enfermedades crónicas como insuficiencia cardíaca, EPOC y diabetes, reduciendo reingresos hospitalarios.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">Hospitales Inteligentes</div>
+        <h4>Hospitales conectados y gestión inteligente</h4>
+        <p>Integración de sensores IoT en instalaciones hospitalarias para monitoreo ambiental (temperatura, humedad, calidad del aire), gestión de ocupación de camas, seguimiento de localización de equipos médicos y control de accesos para bioseguridad.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">Crónicas · Diabetes</div>
+        <h4>Monitoreo continuo de glucosa (CGM)</h4>
+        <p>Sensores subcutáneos que miden los niveles de glucosa cada pocos minutos y transmiten los datos al smartphone del paciente y al médico tratante. Sistemas avanzados se integran con bombas de insulina para crear circuitos de control automatizados (páncreas artificial).<sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">mHealth</div>
+        <h4>Aplicaciones de salud móvil (mHealth)</h4>
+        <p>Apps conectadas a dispositivos IoT que facilitan el seguimiento de tratamientos, la adherencia farmacológica, la gestión de citas médicas y la comunicación directa entre paciente y profesional de salud, integrando telemedicina en tiempo real.<sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">Cadena de Suministro</div>
+        <h4>Gestión inteligente de medicamentos y suministros</h4>
+        <p>Uso de etiquetas RFID y sensores de temperatura para rastrear medicamentos sensibles (como vacunas que requieren cadena de frío), controlar inventarios en tiempo real y garantizar la autenticidad de los fármacos, previniendo la circulación de medicamentos falsificados.<sup class="ref"><a href="#r10">[10]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">IA + IoT</div>
+        <h4>Predicción de enfermedades mediante ML + IoT</h4>
+        <p>Sistemas que combinan los datos continuos captados por sensores IoT con algoritmos de aprendizaje automático para predecir eventos clínicos —infartos, episodios de hipoglucemia severa, agudizaciones de EPOC— antes de que se manifiesten clínicamente.<sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-tag">Adultos Mayores</div>
+        <h4>Sistemas de asistencia al adulto mayor</h4>
+        <p>Dispositivos IoT integrados en el hogar que detectan caídas, inactividad prolongada o patrones inusuales de comportamiento en personas mayores que viven solas, enviando alertas automáticas a familiares o servicios de emergencia para una respuesta inmediata.<sup class="ref"><a href="#r3">[3]</a></sup></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. CONCLUSIONES -->
+  <section class="section" id="conclusiones">
+    <h2><span class="num">6</span> Conclusiones</h2>
+
+    <p>El análisis de la literatura científica revisada permite extraer conclusiones sólidas y bien fundamentadas sobre el estado actual y la proyección futura del IoT en el sector salud. Lejos de ser una tecnología auxiliar o complementaria, el IoT se ha consolidado como un componente estructural de los sistemas sanitarios modernos, con implicaciones que trascienden lo meramente técnico para alcanzar dimensiones clínicas, éticas, económicas y sociales.</p>
+
+    <div class="callout">
+      El IoT en salud no resuelve por sí solo los problemas del sistema sanitario, pero ofrece herramientas poderosas para afrontarlos con mayor inteligencia, eficiencia y equidad — siempre que su implementación se respalde en marcos de seguridad, regulación y formación adecuados.
+    </div>
+
+    <h3>Síntesis de hallazgos principales</h3>
+
+    <div class="cards">
+      <div class="card pro">
+        <div class="card-title"><span class="icon">✅</span> El impacto clínico es real y medible</div>
+        <p>La evidencia demuestra que el monitoreo remoto continuo, la detección temprana de anomalías y el apoyo a la toma de decisiones clínicas mediante IA mejoran efectivamente los resultados de salud, reducen complicaciones y disminuyen los reingresos hospitalarios en pacientes con enfermedades crónicas.<sup class="ref"><a href="#r3">[3]</a></sup><sup class="ref"><a href="#r4">[4]</a></sup></p>
+      </div>
+      <div class="card pro">
+        <div class="card-title"><span class="icon">✅</span> El crecimiento del mercado refleja una adopción masiva y sostenida</div>
+        <p>Con una tasa de crecimiento anual del 23.4% y un mercado proyectado en $464 mil millones para 2034, el IoT en salud ya no es una promesa tecnológica: es una industria consolidada que está rediseñando la infraestructura sanitaria global.<sup class="ref"><a href="#r2">[2]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">⚠️</span> La seguridad es el desafío más urgente y crítico</div>
+        <p>El aumento del 60% en ataques de malware a dispositivos IoT médicos en 2023 y el hecho de que el 83% de estos dispositivos opere con sistemas obsoletos evidencian que la expansión tecnológica debe ir acompañada, de manera obligatoria, de inversión proporcional en ciberseguridad y actualización de infraestructuras.<sup class="ref"><a href="#r6">[6]</a></sup></p>
+      </div>
+      <div class="card con">
+        <div class="card-title"><span class="icon">⚠️</span> La brecha regulatoria y de interoperabilidad persiste</div>
+        <p>La heterogeneidad de dispositivos, protocolos y marcos legales entre países y sistemas de salud constituye una barrera estructural que limita el aprovechamiento pleno del potencial del IoT. La estandarización internacional —liderada por organismos como IEEE— es una condición necesaria para avanzar.<sup class="ref"><a href="#r14">[11]</a></sup></p>
+      </div>
+    </div>
+
+    <h3>Perspectiva futura</h3>
+
+    <p>El horizonte del IoT en salud apunta hacia una convergencia tecnológica cada vez más profunda. La integración con inteligencia artificial generativa, computación de borde (<em>edge computing</em>), redes 5G y tecnología blockchain promete superar muchas de las limitaciones actuales: se reducirán la latencia en la transmisión de datos, se fortalecerá la seguridad mediante registros distribuidos inmutables y se incrementará la capacidad de procesamiento local en los propios dispositivos.<sup class="ref"><a href="#r9">[9]</a></sup></p>
+
+    <p>Para el caso de América Latina y el Perú, el IoT representa una oportunidad estratégica para cerrar brechas históricas de acceso a la salud. La extensión de servicios de telemedicina y monitoreo remoto hacia comunidades rurales y zonas de difícil acceso geográfico —que concentran buena parte de la población con menor acceso a atención especializada— puede constituir un cambio de paradigma con impacto social significativo, siempre que se acompañe de políticas de conectividad, alfabetización digital y financiamiento público adecuado.<sup class="ref"><a href="#r2">[2]</a></sup></p>
+
+    <p>En definitiva, el IoT para la salud representa uno de los campos de mayor potencial transformador de la tecnología contemporánea. Su desarrollo responsable, seguro e inclusivo no es solo una cuestión técnica: es un imperativo ético y social que demanda la colaboración sostenida entre ingenieros, clínicos, legisladores, instituciones académicas y la sociedad civil.</p>
+  </section>
+
+  <!-- 7. REFERENCIAS -->
+  <section class="section" id="referencias">
+    <h2><span class="num">7</span> Referencias (formato IEEE)</h2>
+    <ol class="ref-list">
+      <li id="r1">
+        <span class="ref-num">[1]</span>
+        <span>C. Li, J. Wang, S. Wang, y Y. Zhang, "A review of IoT applications in healthcare," <em>Neurocomputing</em>, vol. 565, p. 127017, ene. 2024. doi: <a href="https://doi.org/10.1016/j.neucom.2023.127017" target="_blank">10.1016/j.neucom.2023.127017</a>. [En línea]. Disponible en: <a href="https://www.sciencedirect.com/science/article/pii/S0925231223011402" target="_blank">https://www.sciencedirect.com/science/article/pii/S0925231223011402</a></span>
+      </li>
+      <li id="r2">
+        <span class="ref-num">[2]</span>
+        <span>Towards Healthcare, "IoT in Healthcare Market Size Uplifts by 23.4% CAGR till 2034," Towards Healthcare Market Research, 2025. [En línea]. Disponible en: <a href="https://www.towardshealthcare.com/insights/iot-in-healthcare-market-size" target="_blank">https://www.towardshealthcare.com/insights/iot-in-healthcare-market-size</a></span>
+      </li>
+      <li id="r3">
+        <span class="ref-num">[3]</span>
+        <span>S. Abdulmalek, A. Nasir, W. A. Jabbar, M. A. M. Almuhaya, A. K. Bairagi, M. A.-M. Khan, y S.-H. Kee, "IoT-Based Healthcare-Monitoring System towards Improving Quality of Life: A Review," <em>Healthcare</em>, vol. 10, no. 10, p. 1993, oct. 2022. doi: <a href="https://doi.org/10.3390/healthcare10101993" target="_blank">10.3390/healthcare10101993</a>. [En línea]. Disponible en: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9601552/" target="_blank">https://pmc.ncbi.nlm.nih.gov/articles/PMC9601552/</a></span>
+      </li>
+      <li id="r4">
+        <span class="ref-num">[4]</span>
+        <span>I. Al Khatib, A. Shamayleh, y M. Ndiaye, "Healthcare and the Internet of Medical Things: Applications, Trends, Key Challenges, and Proposed Resolutions," <em>Informatics</em>, vol. 11, no. 3, p. 47, jul. 2024. doi: <a href="https://doi.org/10.3390/informatics11030047" target="_blank">10.3390/informatics11030047</a>. [En línea]. Disponible en: <a href="https://www.mdpi.com/2227-9709/11/3/47" target="_blank">https://www.mdpi.com/2227-9709/11/3/47</a></span>
+      </li>
+      <li id="r5">
+        <span class="ref-num">[5]</span>
+        <span>O. Almutairi et al., "Health IoT Threats: Survey of Risks and Vulnerabilities," <em>Future Internet</em>, vol. 16, no. 11, p. 389, oct. 2024. doi: <a href="https://doi.org/10.3390/fi16110389" target="_blank">10.3390/fi16110389</a>. [En línea]. Disponible en: <a href="https://www.mdpi.com/1999-5903/16/11/389" target="_blank">https://www.mdpi.com/1999-5903/16/11/389</a></span>
+      </li>
+      <li id="r6">
+        <span class="ref-num">[6]</span>
+        <span>E. Ahmed et al., "Cybersecurity and Frequent Cyber Attacks on IoT Devices in Healthcare: Issues and Solutions," <em>arXiv preprint</em>, arXiv:2501.11250, ene. 2025. [En línea]. Disponible en: <a href="https://arxiv.org/html/2501.11250v1" target="_blank">https://arxiv.org/html/2501.11250v1</a></span>
+      </li>
+      <li id="r7">
+        <span class="ref-num">[7]</span>
+        <span>Appinventiv, "Understanding the Impact of IoT in Healthcare," Appinventiv Technology Insights, oct. 2025. [En línea]. Disponible en: <a href="https://appinventiv.com/blog/iot-in-healthcare/" target="_blank">https://appinventiv.com/blog/iot-in-healthcare/</a></span>
+      </li>
+      <li id="r8">
+        <span class="ref-num">[8]</span>
+        <span>IoT Now, "The impact of IoT on medical equipment and healthcare," <em>IoT Now News & Reports</em>, abr. 2024. [En línea]. Disponible en: <a href="https://www.iot-now.com/2024/04/24/144165-the-impact-of-iot-on-medical-equipment-and-healthcare/" target="_blank">https://www.iot-now.com/2024/04/24/</a></span>
+      </li>
+      <li id="r9">
+        <span class="ref-num">[9]</span>
+        <span>M. S. Farooq et al., "Healthcare Internet of Things (H-IoT): Current Trends, Future Prospects, Applications, Challenges, and Security Issues," <em>Electronics</em>, vol. 12, no. 9, p. 2050, abr. 2023. doi: <a href="https://doi.org/10.3390/electronics12092050" target="_blank">10.3390/electronics12092050</a>. [En línea]. Disponible en: <a href="https://www.mdpi.com/2079-9292/12/9/2050" target="_blank">https://www.mdpi.com/2079-9292/12/9/2050</a></span>
+      </li>
+      <li id="r10">
+        <span class="ref-num">[10]</span>
+        <span>A. Atadoga et al., "Internet of Things (IoT) in healthcare: A systematic review of use cases and benefits," <em>Int. J. Sci. Res. Arch.</em>, vol. 11, no. 1, pp. 1511–1517, 2024. doi: <a href="https://doi.org/10.30574/ijsra.2024.11.1.0243" target="_blank">10.30574/ijsra.2024.11.1.0243</a>. [En línea]. Disponible en: <a href="https://ijsra.net/sites/default/files/IJSRA-2024-0243.pdf" target="_blank">https://ijsra.net/sites/default/files/IJSRA-2024-0243.pdf</a></span>
+      </li>
+      <li id="r14">
+        <span class="ref-num">[11]</span>
+        <span>K. Simonova y Z. Smutny, "Internet of Medical Things Security Frameworks for Risk Assessment and Management: A Scoping Review," <em>BMC Medical Informatics and Decision Making</em>, 2024. [En línea]. Disponible en: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11102065/" target="_blank">https://pmc.ncbi.nlm.nih.gov/articles/PMC11102065/</a></span>
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  Wiki · IoT para la Salud · Grupo 5 &nbsp;|&nbsp; Fuentes verificadas: MDPI · IEEE Xplore · PubMed Central · ScienceDirect · arXiv &nbsp;|&nbsp; 2025
+</footer>
+
+</body>
+</html>
